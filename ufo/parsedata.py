@@ -55,12 +55,11 @@ class ufoDeal(object):
         for eachline in self.cleandata :
             loc = eachline[2]
             if len(loc) >= 1:
-                if loc[0] == ' ':
-                    loc = loc[1:]
+                loc = loc.lstrip(' ')
                 loclist = loc.split(',')
                 if len(loclist) == 2:
-                    eachline[2] = loclist[0]
-                    eachline.insert(3,loclist[1])
+                    eachline[2] = loclist[0].strip(' ')
+                    eachline.insert(3,loclist[1].strip(' '))
                 else:
                     eachline[2] = "NA"
                     eachline.insert(3,"NA")
