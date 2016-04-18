@@ -4,7 +4,7 @@ import time
 import copy
 class ufoDeal(object):
     def __init__(self):
-        pass
+        self.usstates = ["ak","al","ar","az","ca","co","ct","de","fl","ga","hi","ia","id","il","in","ks","ky","la","ma","md","me","mi","mn","mo","ms","mt","nc","nd","ne","nh","nj","nm","nv","ny","oh","ok","or","pa","ri","sc","sd","tn","tx","ut","va","vt","wa","wi","wv","wy"]
     
     def readdata(self,filename,delimiter="\t"):
         self.data = []
@@ -57,7 +57,7 @@ class ufoDeal(object):
             if len(loc) >= 1:
                 loc = loc.lstrip(' ')
                 loclist = loc.split(',')
-                if len(loclist) == 2:
+                if len(loclist) == 2 and loclist[1].strip(' ').lower() in self.usstates:
                     eachline[2] = loclist[0].strip(' ')
                     eachline.insert(3,loclist[1].strip(' '))
                 else:
