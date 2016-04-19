@@ -2,6 +2,44 @@
 import csv
 import time
 import copy
+import pandas as pd
+import numpy as np
+
+
+class ufoPandas(object):
+    def __init__(self):
+        self.usstates = ["ak","al","ar","az","ca","co","ct","de","fl","ga","hi","ia","id","il","in","ks","ky","la","ma","md","me","mi","mn","mo","ms","mt","nc","nd","ne","nh","nj","nm","nv","ny","oh","ok","or","pa","ri","sc","sd","tn","tx","ut","va","vt","wa","wi","wv","wy"]
+        self.data = []
+        
+    def formcolnum(self,filename):
+        self.header = ["DateOccurred","DateReported","Location","ShortDescription","Duration","LongDescription"]
+
+        with open(filename) as fin:
+            fcsv = csv.reader(fin,delimiter='\t')
+            for eachline in fcsv:    
+                if len(eachline) >6:
+                    eachline[5] = (' ').join(eachline[5:])
+                if len(eachline) >=6:
+                    eachdict = {}
+                    for i in range(len(self.header)):
+                        eachdict[self.header[i]] = eachline[i]
+                        self.data.append(eachdict) 
+
+    def readdata(self):
+        self.dfufo = pd.DataFrame(self.data)
+        
+    def checkdate(self):
+        self.dfufo = self.dfufo[(self.dfufo.DateOccurred.str.len() == 8) & (self.dfufo.DateReported.str.len() == 8)]
+        self.dfufo['DateOccurred'] = pd.to_datetime(self.dfufo['DateOccurred'])
+        self.dfufo['DateReported'] = pd.to_datetime(self.dfufo['DateReported'])
+        
+    def checklocform(self):
+        self.dfufo['city'] = [x.split(',')[0].strip(' ') if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
+        self.dfufo['state'] = [x.split(',')[1].strip(' ') if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
+    
+    def filterByState(self):
+        self.dfufo = self.dfufo[(self.dfufo['city'] != "NA") & (self.dfufo['state'] != "NA")]
+                 
 class ufoDeal(object):
     def __init__(self):
         self.usstates = ["ak","al","ar","az","ca","co","ct","de","fl","ga","hi","ia","id","il","in","ks","ky","la","ma","md","me","mi","mn","mo","ms","mt","nc","nd","ne","nh","nj","nm","nv","ny","oh","ok","or","pa","ri","sc","sd","tn","tx","ut","va","vt","wa","wi","wv","wy"]
@@ -52,7 +90,7 @@ class ufoDeal(object):
         print len(self.data)
         
     def checklocform(self):
-        for eachline in self.cleandata :
+        for eachline in self.cleandata:
             loc = eachline[2]
             if len(loc) >= 1:
                 loc = loc.lstrip(' ')
@@ -65,7 +103,14 @@ class ufoDeal(object):
                     eachline.insert(3,"NA")
             else:
                 eachline[2] = "NA"
-                eachline.insert(3,"NA")   
+                eachline.insert(3,"NA")  
+                
+    def filterByState(self):
+        data = copy.deepcopy(self.cleandata) 
+        self.cleandata = []
+        for eachline in data:
+            if not (eachline[2] == 'NA' and eachline[3] == 'NA'):
+                self.cleandata.append([eachline[2],eachline[3]]) 
                 
                 
             
