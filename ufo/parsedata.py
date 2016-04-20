@@ -17,21 +17,23 @@ class ufoPandas(object):
         with open(filename) as fin:
             fcsv = csv.reader(fin,delimiter='\t')
             for eachline in fcsv:    
-                if len(eachline) >6:
-                    eachline[5] = (' ').join(eachline[5:])
-                if len(eachline) >=6:
-                    eachdict = {}
-                    for i in range(len(self.header)):
+
+                eachdict = {}
+                for i in range(len(self.header)):
+                    try:
                         eachdict[self.header[i]] = eachline[i]
-                        self.data.append(eachdict) 
+                    except:
+                        eachdict[self.header[i]] = 'NA'
+                self.data.append(eachdict) 
+
 
     def readdata(self):
         self.dfufo = pd.DataFrame(self.data)
         
     def checkdate(self):
         self.dfufo = self.dfufo[(self.dfufo.DateOccurred.str.len() == 8) & (self.dfufo.DateReported.str.len() == 8)]
-        self.dfufo['DateOccurred'] = pd.to_datetime(self.dfufo['DateOccurred'])
-        self.dfufo['DateReported'] = pd.to_datetime(self.dfufo['DateReported'])
+        self.dfufo['DateOccurred'] = pd.to_datetime(self.dfufo['DateOccurred'],coerce=True)
+        self.dfufo['DateReported'] = pd.to_datetime(self.dfufo['DateReported'],coerce=True)
         
     def checklocform(self):
         self.dfufo['city'] = [x.split(',')[0].strip(' ') if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
@@ -39,6 +41,13 @@ class ufoPandas(object):
     
     def filterByState(self):
         self.dfufo = self.dfufo[(self.dfufo['city'] != "NA") & (self.dfufo['state'] != "NA")]
+        
+    def filterBydateNA(self):
+        self.dfufo = self.dfufo[self.dfufo['DateOccurred'].notnull() & self.dfufo['DateReported'].notnull()]
+        #self.dfufo = self.dfufo[(self.dfufo['DateOccurred'] ==  "NA") & (self.dfufo['DateReported'] ==  "NA")]
+
+
+                 
                  
 class ufoDeal(object):
     def __init__(self):
@@ -49,7 +58,10 @@ class ufoDeal(object):
         with open(filename) as fin:
             fcsv = csv.reader(fin,delimiter='\t')
             for eachline in fcsv:
-                self.data.append(eachline)
+                if len(eachline) <6:
+                    for i in range(len(eachline),6):
+                        eachline.append('NA')
+                self.data.append(tuple(eachline[:6]))
 
                 
     def checkdate(self):
