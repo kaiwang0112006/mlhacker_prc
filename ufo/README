@@ -1,0 +1,2 @@
+ufodate.py保存的脚本反应了一系列代码探索找到了python time模块和pandas在处理时间后结果相差一行的原因：有一行结果为14000630，pandas的todate方法会把这个数据变为NaT（小于1970年）
+ufoexercise.py记录了如果pandas的方法不熟练，按照以前list的操作思路操作dataframe的方法。

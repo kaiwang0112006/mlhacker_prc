@@ -61,7 +61,7 @@ class ufoDeal(object):
                 if len(eachline) <6:
                     for i in range(len(eachline),6):
                         eachline.append('NA')
-                self.data.append(tuple(eachline[:6]))
+                self.data.append(eachline[:6])
 
                 
     def checkdate(self):
