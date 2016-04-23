@@ -40,3 +40,7 @@ for i in range(len(ufo.dfufo)):
         ufo.dfufo.iloc[i]['DateOccurred'] = 'NA'
 print ufo.dfufo.iloc[8651]['DateOccurred']
 
+rowlist = ufo.dfufo[:10].values.tolist()
+print type(rowlist)
+print rowlist
+

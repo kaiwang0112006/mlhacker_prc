@@ -32,8 +32,8 @@ class ufoPandas(object):
         
     def checkdate(self):
         self.dfufo = self.dfufo[(self.dfufo.DateOccurred.str.len() == 8) & (self.dfufo.DateReported.str.len() == 8)]
-        self.dfufo['DateOccurred'] = pd.to_datetime(self.dfufo['DateOccurred'],coerce=True)
-        self.dfufo['DateReported'] = pd.to_datetime(self.dfufo['DateReported'],coerce=True)
+        self.dfufo['DateOccurred'] = pd.to_datetime(self.dfufo['DateOccurred'],format="%Y%m%d",coerce=True)
+        self.dfufo['DateReported'] = pd.to_datetime(self.dfufo['DateReported'],format="%Y%m%d",coerce=True)
         
     def checklocform(self):
         self.dfufo['city'] = [x.split(',')[0].strip(' ') if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
