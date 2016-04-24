@@ -44,7 +44,7 @@ class ufoPandas(object):
         
     def filterBydateNA(self):
         self.dfufo = self.dfufo[self.dfufo['DateOccurred'].notnull() & self.dfufo['DateReported'].notnull()]
-        #self.dfufo = self.dfufo[(self.dfufo['DateOccurred'] ==  "NA") & (self.dfufo['DateReported'] ==  "NA")]
+        self.dfufo = self.dfufo[self.dfufo['DateOccurred']>="19900101"]
 
 
                  

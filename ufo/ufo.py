@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import time
 from datetime import datetime
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 filename = "ufo_awesome.tsv"
 
@@ -25,9 +27,11 @@ ufo2.filterByState()
 print len(ufo2.dfufo)
 print ufo2.dfufo.describe()
 
-
-    
-
+docur = ufo2.dfufo['DateOccurred']
+yearlist = [x.year for x in docur]
+hist, binedges = np.histogram(yearlist)
+print hist
+print binedges
 
 
 
