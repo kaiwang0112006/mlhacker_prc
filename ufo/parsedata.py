@@ -36,8 +36,8 @@ class ufoPandas(object):
         self.dfufo['DateReported'] = pd.to_datetime(self.dfufo['DateReported'],format="%Y%m%d",coerce=True)
         
     def checklocform(self):
-        self.dfufo['city'] = [x.split(',')[0].strip(' ') if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
-        self.dfufo['state'] = [x.split(',')[1].strip(' ') if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
+        self.dfufo['city'] = [x.split(',')[0].strip(' ').upper()  if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
+        self.dfufo['state'] = [x.split(',')[1].strip(' ').upper() if (len(x.split(','))==2 and x.split(',')[1].strip(' ').lower() in self.usstates) else "NA" for x in self.dfufo['Location']]   
     
     def filterByState(self):
         self.dfufo = self.dfufo[(self.dfufo['city'] != "NA") & (self.dfufo['state'] != "NA")]
