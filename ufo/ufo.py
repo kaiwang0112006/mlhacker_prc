@@ -75,8 +75,8 @@ for state in statelist:
 # Fine-tune figure; hide x ticks for top plots and y ticks for right plots
 # demo doc http://matplotlib.org/examples/pylab_examples/subplots_demo.html
 fig.autofmt_xdate()
-fig.text(0.5, 0.04, 'Time', ha='center')
-fig.text(0.04, 0.5, 'Number of UFO sightings', va='center', rotation='vertical')
+fig.text(0.5, 0.1, 'Time', ha='center')
+fig.text(0.05, 0.5, 'Number of UFO sightings', va='center', rotation='vertical')
 #plt.show()
 fig.subplots_adjust(wspace=0.1, hspace=0.8)
 fig.set_size_inches(18.5, 10.5)
